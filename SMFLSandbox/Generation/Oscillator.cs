@@ -13,7 +13,7 @@ namespace SFMLSandbox.Generation
         protected double frequency;
 
         //Based on half the sine functions default range -1, 1
-        protected double amplitude = 1.0;
+        protected double amplitude = 0.1;
 
         //Waveform offset in radians
         protected double phase = 0.0;
