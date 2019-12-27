@@ -4,52 +4,46 @@ using System.Collections.Generic;
 
 namespace SFMLSandbox.Generation
 {
-    public abstract class Oscillator : IEnumerable<double>
+    public abstract class Oscillator
     {
-        //Samples per ms
-        protected double step;
-
-        //Frequency of waveform in Hz
-        protected double frequency;
-
-        //Based on half the sine functions default range -1, 1
-        protected double amplitude = 0.1;
-
-        //Waveform offset in radians
-        protected double phase = 0.0;
-
-        public Oscillator(double timeStep)
-        {
-            step = timeStep;
-        }
-
-        public void SetFrequency(double freq)
-        {
-            frequency = freq;
-        }
-
         public static double SineWave(double time, double frequency, double amplitude, double phase)
         {
             return amplitude * Math.Sin(Math.PI * 2 * time * frequency + phase);
         }
 
-        protected abstract double GenerateWave(double time, double frequency, double amplitude, double phase);
-
-        public IEnumerator<double> GetEnumerator()
+        public static double SawTooth(double time, double frequency, double amplitude, double phase)
         {
-            double i = 0;
-            while (true)
+            double y = 0.0;
+            for (double i = 1; i < 100; i++)
             {
-                i++;
-
-                double x = i / (step * 1000);
-                yield return GenerateWave(x, frequency, amplitude, phase);
+                y += SineWave(time, frequency * i, 1 / i * amplitude, phase);
             }
+
+            return 2 * amplitude / Math.PI * y;
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
+        public static double Square(double time, double frequency, double amplitude, double phase)
         {
-            return GetEnumerator();
+            double y = 0;
+            for (double i = 1; i < 100; i += 2)
+            {
+                y += SineWave(time, frequency * i, 1 / i * amplitude, phase);
+            }
+
+            return y;
+        }
+
+        public static double Triangle(double time, double frequency, double amplitude, double phase)
+        {
+            double y = 0.0;
+            double invert = 1;
+            for (double i = 1; i < 100; i += 2)
+            {
+                y += SineWave(time, invert * frequency * i, 1 / (i * i) / amplitude, phase);
+                invert *= -1;
+            }
+
+            return 8 / (Math.PI * Math.PI) * y;
         }
     }
 }

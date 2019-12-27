@@ -36,6 +36,6 @@ namespace SFMLSandbox.Music
             return notes.ToArray();
         }
 
-        public double[] GetChord(Chord chord) => BuildChord(_chords[chord]);
+        public Degree[] GetChord(Chord chord) => _chords[chord];
     }
 }

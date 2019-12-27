@@ -15,7 +15,8 @@ namespace SFMLSandbox.Music
         {
             return Step((int)degree);
         }
-        public double Interval(double freq, int steps)
+
+        public static double Interval(double freq, int steps)
         {
             return freq * Math.Pow(2, steps / 12.0);
         }
