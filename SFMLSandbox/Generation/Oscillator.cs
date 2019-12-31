@@ -1,11 +1,18 @@
 ﻿using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
 namespace SFMLSandbox.Generation
 {
-    public abstract class Oscillator
+    public static class Oscillator
     {
+        static double[] rngBuffer;
+        static Oscillator()
+        {
+            rngBuffer = new double[44100 * 10];
+            rngBuffer = rngBuffer.Select(x => 2 * new Random().NextDouble() - 1).ToArray();
+        }
         public static double SineWave(double time, double frequency, double amplitude, double phase)
         {
             return amplitude * Math.Sin(Math.PI * 2 * time * frequency + phase);
@@ -44,6 +51,12 @@ namespace SFMLSandbox.Generation
             }
 
             return 8 / (Math.PI * Math.PI) * y;
+        }
+
+        public static double Noise(double time, double amplitude)
+        {
+            return amplitude * rngBuffer[(int)(time * rngBuffer.Length) % rngBuffer.Length];
+            //return amplitude * (new Random().NextDouble() * 2 - 1);
         }
     }
 }
